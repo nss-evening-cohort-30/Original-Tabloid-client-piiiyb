@@ -28,6 +28,26 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
             <NavbarToggler onClick={toggleNavbar} />
             <Collapse isOpen={open} navbar>
               <Nav navbar>
+                <NavItem>
+                  <NavLink tag={RRNavLink} to="/">
+                    Home
+                  </NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink tag={RRNavLink} to="/explore">
+                    Explore
+                  </NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink tag={RRNavLink} to="/subscribed-posts">
+                    Subscribed Posts
+                  </NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink tag={RRNavLink} to="/my-posts">
+                    My Posts
+                  </NavLink>
+                </NavItem>
                 {loggedInUser.roles.includes("Admin") && (
                   <NavItem>
                     <NavLink tag={RRNavLink} to="/userprofiles">
@@ -35,6 +55,16 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
                     </NavLink>
                   </NavItem>
                 )}
+                <NavItem>
+                  <NavLink tag={RRNavLink} to="/categories">
+                    Categories
+                  </NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink tag={RRNavLink} to="/tags">
+                    Tags
+                  </NavLink>
+                </NavItem>
               </Nav>
             </Collapse>
             <Button
