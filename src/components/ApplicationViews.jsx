@@ -4,6 +4,12 @@ import Login from "./auth/Login";
 import Register from "./auth/Register";
 import UserProfileList from "./userprofiles/UserProfilesList";
 import UserProfileDetails from "./userprofiles/UserProfileDetails";
+import Home from "./Home";
+import Explore from "./Explore";
+import SubscribedPosts from "./SubscribedPosts";
+import MyPosts from "./MyPosts";
+import Categories from "./Categories";
+import Tags from "./Tags";
 
 export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
   return (
@@ -13,7 +19,47 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
           index
           element={
             <AuthorizedRoute loggedInUser={loggedInUser}>
-              <p>Welcome to Tabloid!</p>
+              <Home />
+            </AuthorizedRoute>
+          }
+        />
+        <Route
+          path="explore"
+          element={
+            <AuthorizedRoute loggedInUser={loggedInUser}>
+              <Explore />
+            </AuthorizedRoute>
+          }
+        />
+        <Route
+          path="subscribed-posts"
+          element={
+            <AuthorizedRoute loggedInUser={loggedInUser}>
+              <SubscribedPosts />
+            </AuthorizedRoute>
+          }
+        />
+        <Route
+          path="my-posts"
+          element={
+            <AuthorizedRoute loggedInUser={loggedInUser}>
+              <MyPosts />
+            </AuthorizedRoute>
+          }
+        />
+        <Route
+          path="categories"
+          element={
+            <AuthorizedRoute loggedInUser={loggedInUser}>
+              <Categories />
+            </AuthorizedRoute>
+          }
+        />
+        <Route
+          path="tags"
+          element={
+            <AuthorizedRoute loggedInUser={loggedInUser}>
+              <Tags />
             </AuthorizedRoute>
           }
         />
