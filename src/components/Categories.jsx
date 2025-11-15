@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getCategories } from "../managers/categoryManager";
+import { deleteCategory, getCategories } from "../managers/categoryManager";
 import { Card, CardBody, ListGroup, ListGroupItem } from "reactstrap";
 
 export default function Categories() {
@@ -7,6 +7,12 @@ export default function Categories() {
 
   const getAllCategories = () => {
     getCategories().then(setCategories);
+  };
+
+  const deleteHandler = (categoryId) => {
+    deleteCategory(categoryId).then(() => {
+      getAllCategories();
+    });
   };
 
   useEffect(() => {
@@ -49,7 +55,18 @@ export default function Categories() {
                 (e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.8)")
               }
             >
-              {c.name}
+              <span>{c.name}</span>
+
+              <Button
+                color="danger"
+                size="sm"
+                onClick={() => deleteHandler(c.id)}
+                style={{
+                  borderRadius: "6px",
+                }}
+              >
+                Delete
+              </Button>
             </ListGroupItem>
           ))}
         </ListGroup>
