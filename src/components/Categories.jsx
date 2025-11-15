@@ -1,8 +1,24 @@
-export default function Categories() {
+import { useState, useEffect } from "react";
+import { getCategories } from "../managers/categoryManager";
+
+
+export default function Categories({ setDetailsBikeId }) {
+  const [Categories, setCategories] = useState([]);
+
+  const getAllCategories = () => {
+    getCategories().then(setCategories);
+  };
+
+  useEffect(() => {
+    getAllCategories();
+  }, []);
   return (
-    <div className="container mt-5">
-      <h1>Categories</h1>
-      <p>Browse posts by category.</p>
-    </div>
+    <>
+      <h2>Categories</h2>
+      {Categories.map((c) => (
+        // insert categories here
+        <>{c.name}</>
+      ))}
+    </>
   );
 }
