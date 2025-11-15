@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
-import { createCategory, deleteCategory, getCategories } from "../managers/categoryManager";
+import { createCategory, deleteCategory, getCategories, updateCategory } from "../managers/categoryManager";
 import { Button, Card, CardBody, ListGroup, ListGroupItem } from "reactstrap";
 
 export default function Categories() {
+  const [editingCategoryId, setEditingCategoryId] = useState(null);
   const [categories, setCategories] = useState([]);
   const [newCategory, setNewCategory] = useState("");
+  const [updateACategory, setUpdateACategory] = useState("");
 
   const getAllCategories = () => {
     getCategories().then(setCategories);
@@ -24,6 +26,15 @@ export default function Categories() {
     });
   };
 
+  const updateHander = (id) => {
+    if (!updateCategory) return;
+    updateCategory(id, { name: updateACategory }).then(() => {
+      getAllCategories();
+      setEditingCategoryId(null);
+      setUpdateACategory("");
+    });
+  };
+  
   useEffect(() => {
     getAllCategories();
   }, []);
@@ -67,18 +78,48 @@ export default function Categories() {
             }
           >
             <span>#{c.name}</span>
-
-            <Button
-              color="danger"
-              size="sm"
-              onClick={() => deleteHandler(c.id)}
-              style={{
-                borderRadius: "6px",
-                marginLeft: "auto",
-              }}
-            >
-              Delete
-            </Button>
+            <div style={{ display: "flex", gap: "6px" }}>
+              {editingCategoryId === c.id ? (
+                <>
+                  <input
+                    type="text"
+                    value={updateACategory}
+                    onChange={(e) => setUpdateACategory(e.target.value)}
+                    style={{ height: "30px", borderRadius: "6px", padding: "2px 6px" }}
+                  />
+                  <Button
+                    color="success"
+                    size="sm"
+                    onClick={() => updateHander(c.id)}
+                    style={{ borderRadius: "6px" }}
+                  >
+                    Submit
+                  </Button>
+                </>
+                ) : (
+                <>
+                  <Button
+                    color="primary"
+                    size="sm"
+                    onClick={() => {
+                      setEditingCategoryId(c.id);
+                      setUpdateACategory(c.name);
+                    }}
+                    style={{ borderRadius: "6px" }}
+                  >
+                    Update
+                  </Button>
+                  <Button
+                    color="danger"
+                    size="sm"
+                    onClick={() => deleteHandler(c.id)}
+                    style={{ borderRadius: "6px" }}
+                  >
+                    Delete
+                  </Button>
+                </>
+              )}
+            </div>
           </ListGroupItem>
         ))}
         <ListGroupItem

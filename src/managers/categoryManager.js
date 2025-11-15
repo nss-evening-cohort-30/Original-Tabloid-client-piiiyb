@@ -18,7 +18,7 @@ export const createCategory = (category) => {
   }).then((res) => res.json);
 };
 
-export const updateCategory = (category, id) => {
+export const updateCategory = (id, category) => {
   return fetch(`${_apiUrl}/${id}`, {
     method: "PUT",
     headers: {
