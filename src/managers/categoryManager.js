@@ -7,3 +7,13 @@ export const getCategories = () => {
 export const deleteCategory = (id) => {
   return fetch(`${_apiUrl}/${id}`, {method: "DELETE"});
 };
+
+export const createCategory = (category) => {
+  return fetch(_apiUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(category),
+  }).then((res) => res.json);
+};
