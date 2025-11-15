@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { deleteCategory, getCategories } from "../managers/categoryManager";
-import { Card, CardBody, ListGroup, ListGroupItem } from "reactstrap";
+import { Button, Card, CardBody, ListGroup, ListGroupItem } from "reactstrap";
 
 export default function Categories() {
   const [categories, setCategories] = useState([]);
@@ -47,6 +47,8 @@ export default function Categories() {
                 border: "1px solid rgba(0,0,0,0.1)",
                 cursor: "pointer",
                 transition: "0.2s",
+                display: "flex",                   
+                justifyContent: "space-between",  
               }}
               onMouseEnter={(e) =>
                 (e.currentTarget.style.backgroundColor = "rgba(255,255,255,1)")
@@ -63,6 +65,7 @@ export default function Categories() {
                 onClick={() => deleteHandler(c.id)}
                 style={{
                   borderRadius: "6px",
+                  marginLeft: "auto", 
                 }}
               >
                 Delete
