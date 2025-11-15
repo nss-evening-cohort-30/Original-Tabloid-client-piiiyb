@@ -58,7 +58,7 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
         <Route
           path="tags"
           element={
-            <AuthorizedRoute loggedInUser={loggedInUser}>
+            <AuthorizedRoute loggedInUser={loggedInUser} roles={["Admin"]}>
               <Tags />
             </AuthorizedRoute>
           }
