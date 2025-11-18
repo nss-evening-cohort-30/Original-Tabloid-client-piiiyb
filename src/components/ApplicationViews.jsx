@@ -10,6 +10,7 @@ import SubscribedPosts from "./SubscribedPosts";
 import MyPosts from "./MyPosts";
 import Categories from "./Categories";
 import Tags from "./Tags";
+import UserProfileEdit from "./userprofiles/UserProfileEdit";
 import PostDetails from "./PostDetails";
 
 export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
@@ -88,6 +89,14 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
                 <UserProfileDetails />
               </AuthorizedRoute>
             }
+          />
+          <Route
+            path=":id/edit"
+            element={
+              <AuthorizedRoute loggedInUser={loggedInUser} roles={["Admin"]}>
+                <UserProfileEdit />
+              </AuthorizedRoute>
+            } 
           />
         </Route>
         <Route
