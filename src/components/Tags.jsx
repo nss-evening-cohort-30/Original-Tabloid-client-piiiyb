@@ -45,19 +45,21 @@ export default function Tags() {
   };
 
   const toggleEditModal = () => {
-    setIsEditModalOpen(!isEditModalOpen);
-    if (!isEditModalOpen) {
+    if (isEditModalOpen) {
+      // Modal is currently open, about to close - clear the state
       setTagName("");
       setCurrentTag(null);
     }
+    setIsEditModalOpen(!isEditModalOpen);
     setError(null);
   };
 
   const toggleDeleteModal = () => {
-    setIsDeleteModalOpen(!isDeleteModalOpen);
-    if (!isDeleteModalOpen) {
+    if (isDeleteModalOpen) {
+      // Modal is currently open, about to close - clear the state
       setCurrentTag(null);
     }
+    setIsDeleteModalOpen(!isDeleteModalOpen);
     setError(null);
   };
 
