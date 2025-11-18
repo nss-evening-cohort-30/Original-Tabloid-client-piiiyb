@@ -49,8 +49,17 @@ export default function UserProfileList() {
                 )}
               </td>
               <td>
-                <Link to={`/userprofiles/${profile.id}`} className="btn btn-sm btn-outline-primary">
+                <Link 
+                  to={`/userprofiles/${profile.id}`} 
+                  className="btn btn-sm btn-outline-primary"
+                >
                   Details
+                </Link>
+                <Link 
+                  to={`/userprofiles/${profile.id}/edit`} 
+                  className="btn btn-sm btn-warning mx-2"
+                >
+                  Edit
                 </Link>
               </td>
             </tr>
