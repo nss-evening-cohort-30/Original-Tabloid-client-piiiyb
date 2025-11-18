@@ -112,7 +112,7 @@ export default function PostDetails() {
             <strong>Subtitle:</strong> {post.subTitle}
           </CardText>
           <CardText>
-            <strong>Author:</strong> {post.author?.name || "Unknown"}
+            <strong>Author:</strong> {post.user ? `${post.user.firstName} ${post.user.lastName}` : "Unknown"}
           </CardText>
           <CardText>
             <strong>Category:</strong> {post.category?.name || "Uncategorized"}
