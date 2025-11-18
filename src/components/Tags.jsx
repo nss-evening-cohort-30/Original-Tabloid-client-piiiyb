@@ -46,7 +46,6 @@ export default function Tags() {
 
   const toggleEditModal = () => {
     if (isEditModalOpen) {
-      // Modal is currently open, about to close - clear the state
       setTagName("");
       setCurrentTag(null);
     }
@@ -56,7 +55,6 @@ export default function Tags() {
 
   const toggleDeleteModal = () => {
     if (isDeleteModalOpen) {
-      // Modal is currently open, about to close - clear the state
       setCurrentTag(null);
     }
     setIsDeleteModalOpen(!isDeleteModalOpen);
