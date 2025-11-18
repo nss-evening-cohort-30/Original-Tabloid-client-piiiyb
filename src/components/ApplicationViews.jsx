@@ -10,6 +10,7 @@ import SubscribedPosts from "./SubscribedPosts";
 import MyPosts from "./MyPosts";
 import Categories from "./Categories";
 import Tags from "./Tags";
+import PostDetails from "./PostDetails";
 
 export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
   return (
@@ -60,6 +61,14 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
           element={
             <AuthorizedRoute loggedInUser={loggedInUser} roles={["Admin"]}>
               <Tags />
+            </AuthorizedRoute>
+          }
+        />
+        <Route
+          path="posts/:id"
+          element={
+            <AuthorizedRoute loggedInUser={loggedInUser}>
+              <PostDetails />
             </AuthorizedRoute>
           }
         />

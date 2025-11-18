@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getPosts } from "../managers/postManager";
+import { getAllPosts } from "../managers/postManager";
 import {
   Container,
   Row,
@@ -15,7 +15,7 @@ export default function Home() {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    getPosts().then(setPosts)
+    getAllPosts().then(setPosts)
   }, [])
 
   const formatDate = (dateString) =>
@@ -54,7 +54,7 @@ export default function Home() {
                   <span>Read Time: {bigPost.realTime} min</span>
                 </div>
                 <div className="text-muted small mt-1">
-                  By {bigPost.author?.name} - {bigPost.category?.name}
+                  By {bigPost.user?.firstName} {bigPost.user?.lastName} - {bigPost.category?.name}
                 </div>
               </CardBody>
             </Card>
@@ -79,7 +79,7 @@ export default function Home() {
                     <span>Read Time: {post.realTime} min</span>
                   </div>
                   <div className="text-muted small mt-1">
-                    By {post.author?.name} • {post.category?.name}
+                    By {post.user?.firstName} {post.user?.lastName} • {post.category?.name}
                   </div>
                 </CardBody>
               </Card>
