@@ -9,14 +9,29 @@ import {
   CardTitle,
   CardSubtitle,
   CardText,
+  Button,
 } from "reactstrap";
+import { tryGetLoggedInUser } from "../managers/authManager";
 
 export default function Home() {
   const [posts, setPosts] = useState([]);
+ const [loggedInUser, setLoggedInUser] = useState(null);
+
+  useEffect(() => {
+    tryGetLoggedInUser().then((user) => {
+      console.log("User object returned from API:", user); 
+      if (user) {
+        console.log("User ID:", user.id);
+      }
+      setLoggedInUser(user);
+    });
+  }, []);
 
   useEffect(() => {
     getPosts().then(setPosts)
   }, [])
+
+
 
   const formatDate = (dateString) =>
     new Date(dateString).toLocaleDateString();
@@ -56,6 +71,7 @@ export default function Home() {
                 <div className="text-muted small mt-1">
                   By {bigPost.author?.name} - {bigPost.category?.name}
                 </div>
+                
               </CardBody>
             </Card>
           </Col>
@@ -79,8 +95,14 @@ export default function Home() {
                     <span>Read Time: {post.realTime} min</span>
                   </div>
                   <div className="text-muted small mt-1">
-                    By {post.author?.name} • {post.category?.name}
+                    By {post.user?.firstName} • {post.category?.name}
                   </div>
+                  {loggedInUser.id == post.userId && (
+  <>
+    <Button>Edit</Button>
+    <Button>Delete</Button>
+  </>
+)}
                 </CardBody>
               </Card>
             ))}
