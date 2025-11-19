@@ -11,6 +11,7 @@ import MyPosts from "./MyPosts";
 import Categories from "./Categories";
 import Tags from "./Tags";
 import PostDetails from "./PostDetails";
+import AuthorDetails from "./authors/AuthorDetails";
 
 export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
   return (
@@ -72,6 +73,15 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
             </AuthorizedRoute>
           }
         />
+        <Route
+          path="authors/:id"
+          element={
+            <AuthorizedRoute loggedInUser={loggedInUser}>
+              <AuthorDetails />
+            </AuthorizedRoute>
+          }
+        />
+
         <Route path="/userprofiles">
           <Route
             index
