@@ -92,6 +92,7 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
             </NavItem>
           </Nav>
         )}
+
       </Navbar>
     </div>
   );
