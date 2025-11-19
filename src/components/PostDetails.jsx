@@ -18,11 +18,13 @@ import {
   Input,
   Alert,
 } from "reactstrap";
+import { getPostComments } from "../managers/postCommentManger";
 
 export default function PostDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [post, setPost] = useState(null);
+  const [postComments, setPostComments] = useState([]);
   const [allTags, setAllTags] = useState([]);
   const [selectedTagIds, setSelectedTagIds] = useState([]);
   const [isManageTagsModalOpen, setIsManageTagsModalOpen] = useState(false);
@@ -46,6 +48,7 @@ export default function PostDetails() {
         setError(err.message);
         setLoading(false);
       });
+    getPostComments(id).then(setPostComments)
   };
 
   const loadAllTags = () => {
@@ -155,7 +158,16 @@ export default function PostDetails() {
           </div>
         </CardBody>
       </Card>
-
+              <Card>
+                {postComments.map((comment) => (
+                  <div key={comment.id}>
+                    {comment.id}
+                    {comment.user}
+                    {comment.comment}
+                    {comment.postedOne}
+                  </div>
+                ))}
+              </Card>
       {/* Manage Tags Modal */}
       <Modal isOpen={isManageTagsModalOpen} toggle={toggleManageTagsModal}>
         <ModalHeader toggle={toggleManageTagsModal}>Manage Tags</ModalHeader>
