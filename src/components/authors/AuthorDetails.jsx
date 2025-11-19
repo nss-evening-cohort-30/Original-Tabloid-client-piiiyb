@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import {
   Container,
   Row,
@@ -9,6 +9,7 @@ import {
   CardTitle,
   CardSubtitle,
   CardText,
+  Button
 } from "reactstrap";
 import { getProfile } from "../../managers/userProfileManager";
 import { getPostsByUser } from "../../managers/postManager";
@@ -93,6 +94,15 @@ export default function AuthorDetails() {
                 </div>
                 <div className="text-muted small mt-1">
                   Category: {post.category?.name}
+                </div>
+                <div className="mt-3">
+                  <Button
+                    color="primary"
+                    tag={Link}
+                    to={`/posts/${post.id}`}
+                  >
+                    View
+                  </Button>
                 </div>
               </CardBody>
             </Card>
