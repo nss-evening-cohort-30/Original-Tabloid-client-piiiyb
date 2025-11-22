@@ -102,14 +102,6 @@ export default function Home() {
                   <div className="text-muted small mt-1">
                     By {post.user?.firstName} • {post.category?.name}
                   </div>
-                  {loggedInUser.id == post.userId && (
-                    <>
-                      <Link to={`/update-form/${post.id}`}>
-                    <Button>Edit</Button>
-                  </Link>
-                      <Button>Delete</Button>
-                    </>
-                  )}
                 </CardBody>
               </Card>
             ))}
