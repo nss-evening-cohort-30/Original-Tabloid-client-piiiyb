@@ -14,11 +14,11 @@ import {
   Button,
 } from "reactstrap";
 import { tryGetLoggedInUser } from "../managers/authManager";
-import { Link } from "react-router-dom";
 
 export default function Home() {
   const [posts, setPosts] = useState([]);
- const [loggedInUser, setLoggedInUser] = useState(null);
+  const [loggedInUser, setLoggedInUser] = useState(null);
+  const [authors, setAuthors] = useState([]);
 
   useEffect(() => {
     tryGetLoggedInUser().then((user) => {
@@ -29,7 +29,7 @@ export default function Home() {
       setLoggedInUser(user);
     });
   }, []);
-  const [authors, setAuthors] = useState([]);
+  
 
   useEffect(() => {
     getAllPosts().then(setPosts);
@@ -77,31 +77,9 @@ export default function Home() {
               </div>
             </CardBody>
           </Card>
-
-          {smallPosts.map((post) => (
-            <Card className="mb-3" key={post.id}>
-              <CardBody>
-                <CardTitle tag="h5" className="mb-1">
-                  {post.title}
-                </CardTitle>
-                <CardSubtitle className="mb-2 text-muted" tag="h6">
-                  {post.subTitle}
-                </CardSubtitle>
-                <CardText className="text-muted">{post.body}</CardText>
-
-                <div className="d-flex justify-content-between text-muted small">
-                  <span>Published: {formatDate(post.publishedOn)}</span>
-                  <span>Read Time: {post.realTime} min</span>
-                </div>
-                <div className="text-muted small mt-1">
-                  By {post.user?.firstName} {post.user?.lastName} •{" "}
-                  {post.category?.name}
-                </div>
-                
-              </CardBody>
-            </Card>
-<<<<<<< HEAD
           </Col>
+
+          
 
           <Col md="4">
             {smallPosts.map((post) => (
@@ -125,22 +103,18 @@ export default function Home() {
                     By {post.user?.firstName} • {post.category?.name}
                   </div>
                   {loggedInUser.id == post.userId && (
-  <>
-    <Link to={`/update-form/${post.id}`}>
-  <Button>Edit</Button>
-</Link>
-    <Button>Delete</Button>
-  </>
-)}
+                    <>
+                      <Link to={`/update-form/${post.id}`}>
+                    <Button>Edit</Button>
+                  </Link>
+                      <Button>Delete</Button>
+                    </>
+                  )}
                 </CardBody>
               </Card>
             ))}
           </Col>
-        </Row>
-      <Col md="4">{/* Authors will go here later */}</Col>
-=======
-          ))}
-        </Col>
+
         <Col md="4">
           <h5 className="mb-3">Authors</h5>
           {authors.map((author) => (
@@ -174,7 +148,6 @@ export default function Home() {
           ))}
         </Col>
       </Row>
->>>>>>> a44263d3b0bccee8b65102babe18b217d58f8475
     </Container>
   );
 }
