@@ -64,32 +64,33 @@ export const updatePostTags = (postId, tagIds) => {
 
 export const getPostsByUser = (userId) => {
   return fetch(`${_apiUrl}/user/${userId}`).then((res) => res.json());
-}
-
-
-export const createPost = (post) => {
-  return fetch(apiUrl, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${localStorage.getItem("userToken")}`,
-    },
-    body: JSON.stringify(post),
-  }).then((res) => {
-    if (!res.ok) {
-      throw new Error("Failed to create post");
-    }
-    return res.json();
-  });
 };
 
+export const createPost = (post) => {
+  return fetch(_apiUrl, {
+    method: "POST",
+    credentials: "same-origin",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(post),
+  }).then((res) => res.json());
+};
+
+export const updatePost = (id, post) => {
+  return fetch(`${_apiUrl}/${id}`, {
+    method: "PUT",
+    credentials: "same-origin",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(post),
+  });
+};
 
 export const deletePost = (id) => {
   return fetch(`${_apiUrl}/${id}`, {
     method: "DELETE",
-  }).then(res => {
-    if (!res.ok) {
-      throw new Error("Failed to delete post");
-    }
+    credentials: "same-origin",
   });
 };
