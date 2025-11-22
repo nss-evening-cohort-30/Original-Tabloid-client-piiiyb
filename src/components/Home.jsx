@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { getAllPosts } from "../managers/postManager";
-import { getAllUserProfiles } from "../managers/userProfileManager";
+import { deletePost, getAllPosts } from "../managers/postManager";
 import {
   Container,
   Row,
@@ -11,19 +9,30 @@ import {
   CardTitle,
   CardSubtitle,
   CardText,
+  Button,
 } from "reactstrap";
+import { tryGetLoggedInUser } from "../managers/authManager";
+import { Link } from "react-router-dom";
 
 export default function Home() {
   const [posts, setPosts] = useState([]);
-  const [authors, setAuthors] = useState([]);
+  const [loggedInUser, setLoggedInUser] = useState(null);
+
+  useEffect(() => {
+    tryGetLoggedInUser().then((user) => {
+      console.log("User object returned from API:", user);
+      if (user) {
+        console.log("User ID:", user.id);
+      }
+      setLoggedInUser(user);
+    });
+  }, []);
 
   useEffect(() => {
     getAllPosts().then(setPosts);
-    getAllUserProfiles().then(setAuthors);
   }, []);
 
-  const formatDate = (dateString) =>
-    new Date(dateString).toLocaleDateString();
+  const formatDate = (dateString) => new Date(dateString).toLocaleDateString();
 
   if (!posts.length) {
     return (
@@ -41,7 +50,7 @@ export default function Home() {
     <Container className="mt-4">
       <h2 className="mb-4">Latest Posts</h2>
       <Row>
-        <Col md="8">
+        <Col md="6">
           <Card className="mb-4">
             <CardBody>
               <CardTitle tag="h3">{bigPost.title}</CardTitle>
@@ -56,12 +65,31 @@ export default function Home() {
                 <span>Read Time: {bigPost.realTime} min</span>
               </div>
               <div className="text-muted small mt-1">
-                By {bigPost.user?.firstName} {bigPost.user?.lastName} •{" "}
-                {bigPost.category?.name}
+                By {bigPost.author?.name} - {bigPost.category?.name}
               </div>
+              {loggedInUser.id == bigPost.userId && (
+                  <>
+                    <Link to={`/update-form/${post.id}`}>
+                      <Button>Edit</Button>
+                    </Link>
+                    <Button
+                      onClick={() => {
+                        deletePost(bigPost.id).then(() => {
+                          setPosts((prev) =>
+                            prev.filter((p) => p.id !== bigPost.id)
+                          );
+                        });
+                      }}
+                    >
+                      Delete
+                    </Button>
+                  </>
+                )}
             </CardBody>
           </Card>
+        </Col>
 
+        <Col md="4">
           {smallPosts.map((post) => (
             <Card className="mb-3" key={post.id}>
               <CardBody>
@@ -78,46 +106,32 @@ export default function Home() {
                   <span>Read Time: {post.realTime} min</span>
                 </div>
                 <div className="text-muted small mt-1">
-                  By {post.user?.firstName} {post.user?.lastName} •{" "}
-                  {post.category?.name}
+                  By {post.user?.firstName} • {post.category?.name}
                 </div>
-              </CardBody>
-            </Card>
-          ))}
-        </Col>
-        <Col md="4">
-          <h5 className="mb-3">Authors</h5>
-          {authors.map((author) => (
-            <Card
-              className="mb-2"
-              key={author.id}
-              style={{ cursor: "pointer" }}
-            >
-              <CardBody className="d-flex align-items-center p-2">
-                <Link
-                  to={`/authors/${author.id}`}
-                  className="d-flex align-items-center text-decoration-none text-dark w-100"
-                >
-                  {author.imageLocation && (
-                    <img
-                      src={author.imageLocation}
-                      alt={`${author.firstName} ${author.lastName}`}
-                      style={{
-                        width: "40px",
-                        height: "40px",
-                        borderRadius: "50%",
-                        objectFit: "cover",
-                        marginRight: "10px",
+                {loggedInUser.id == post.userId && (
+                  <>
+                    <Link to={`/update-form/${post.id}`}>
+                      <Button>Edit</Button>
+                    </Link>
+                    <Button
+                      onClick={() => {
+                        deletePost(post.id).then(() => {
+                          setPosts((prev) =>
+                            prev.filter((p) => p.id !== post.id)
+                          );
+                        });
                       }}
-                    />
-                  )}
-                  <span>{author.firstName} {author.lastName}</span>
-                </Link>
+                    >
+                      Delete
+                    </Button>
+                  </>
+                )}
               </CardBody>
             </Card>
           ))}
         </Col>
       </Row>
+      <Col md="4">{/* Authors will go here later */}</Col>
     </Container>
   );
 }

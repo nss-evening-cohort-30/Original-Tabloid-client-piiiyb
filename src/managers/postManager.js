@@ -82,3 +82,14 @@ export const createPost = (post) => {
     return res.json();
   });
 };
+
+
+export const deletePost = (id) => {
+  return fetch(`${_apiUrl}/${id}`, {
+    method: "DELETE",
+  }).then(res => {
+    if (!res.ok) {
+      throw new Error("Failed to delete post");
+    }
+  });
+};
