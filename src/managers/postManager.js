@@ -64,4 +64,33 @@ export const updatePostTags = (postId, tagIds) => {
 
 export const getPostsByUser = (userId) => {
   return fetch(`${_apiUrl}/user/${userId}`).then((res) => res.json());
-}
+};
+
+export const createPost = (post) => {
+  return fetch(_apiUrl, {
+    method: "POST",
+    credentials: "same-origin",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(post),
+  }).then((res) => res.json());
+};
+
+export const updatePost = (id, post) => {
+  return fetch(`${_apiUrl}/${id}`, {
+    method: "PUT",
+    credentials: "same-origin",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(post),
+  });
+};
+
+export const deletePost = (id) => {
+  return fetch(`${_apiUrl}/${id}`, {
+    method: "DELETE",
+    credentials: "same-origin",
+  });
+};
