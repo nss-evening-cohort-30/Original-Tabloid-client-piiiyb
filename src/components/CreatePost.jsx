@@ -3,11 +3,12 @@ import { DropdownItem, DropdownToggle, Form, UncontrolledDropdown, DropdownMenu 
 import { useParams, useNavigate } from "react-router-dom";
 import { createPost, updatePost } from "../managers/postManager";
 import { getAllCategories } from "../managers/categoryManager";
+import { tryGetLoggedInUser } from "../managers/authManager";
 
 export default function UpdateForm() {
   const { id } = useParams();
   const navigate = useNavigate();
-
+ const [loggedInUser, setLoggedInUser] = useState(null);
   const [post, setPost] = useState(null);
   const [formData, setFormData] = useState({
     title: "",
@@ -15,6 +16,8 @@ export default function UpdateForm() {
     body: "",
     categoryId: "",
   });
+
+
 
   const [categories, setCategories] = useState([]);
 
