@@ -65,3 +65,20 @@ export const updatePostTags = (postId, tagIds) => {
 export const getPostsByUser = (userId) => {
   return fetch(`${_apiUrl}/user/${userId}`).then((res) => res.json());
 }
+
+
+export const createPost = (post) => {
+  return fetch(apiUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+    },
+    body: JSON.stringify(post),
+  }).then((res) => {
+    if (!res.ok) {
+      throw new Error("Failed to create post");
+    }
+    return res.json();
+  });
+};
