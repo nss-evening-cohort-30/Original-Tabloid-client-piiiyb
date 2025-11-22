@@ -113,11 +113,11 @@ export default function PostForm({loggedInUser}) {
                         <option value="">
                             Select a category
                         </option>
-                        {categories.map((category) => {
+                        {categories.map((category) => (
                             <option key={category.id} value={category.id}>
                                 {category.name}
                             </option>
-                        })}
+                        ))}
                     </select>
                 </div>
 
