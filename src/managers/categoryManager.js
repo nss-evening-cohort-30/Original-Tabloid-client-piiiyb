@@ -1,4 +1,8 @@
-const _apiUrl = "/api/Category";
+const _apiUrl = "/api/category";
+
+export const getAllCategories = () => {
+  return fetch(_apiUrl).then((res) => res.json());
+};
 
 export const getCategories = () => {
   return fetch(_apiUrl).then((res) => res.json());
