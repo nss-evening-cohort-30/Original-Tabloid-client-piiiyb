@@ -31,6 +31,8 @@ export default function PostDetails() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [newPostComment, setNewPostComment] = useState("");
+  const [updateAPostComment, setUpdateAPostComment] = useState("");
+    const [editingPostCommentId, setEditingPostCommentId] = useState(null);
 
 
   useEffect(() => {
@@ -107,8 +109,7 @@ export default function PostDetails() {
       </div>
     );
   }
-
-  //start of comment handlers
+  
   const createPostCommentHandler = () => {
     if (!newPostComment) return;
     createCategory({ comment: newPostComment }).then(() => {
@@ -117,9 +118,18 @@ export default function PostDetails() {
     });
   };
 
-    const deletePostCommentHandler = (postCommentId) => {
+  const deletePostCommentHandler = (postCommentId) => {
     deletePostComment(postCommentId).then(() => {
       getPostComments(id).then(setPostComments);
+    });
+  };
+
+  const updatePostCommentHandler = (postCommentId) => {
+    if (!updateAPostComment) return;
+    updatePostComment(postCommentId, { comment: updatePostComment }).then(() => {
+      getPostComments(id).then(setPostComments);
+      setEditingPostCommentId(null);
+      setUpdateAPostComment("");
     });
   };
   //
@@ -227,11 +237,53 @@ export default function PostDetails() {
           <Button
             color="danger"
             size="sm"
-            onClick={() => deletePostComment(comment.id)}
+            onClick={() => deletePostCommentHandler(comment.id)}
             style={{ borderRadius: "6px" }}
           >
             Delete
           </Button>
+          <div style={{ display: "flex", gap: "6px" }}>
+              {editingPostCommentId === comment.id ? (
+                <>
+                  <input
+                    type="text"
+                    value={updateAPostComment}
+                    onChange={(e) => setUpdateAPostComment(e.target.value)}
+                    style={{ height: "30px", borderRadius: "6px", padding: "2px 6px" }}
+                  />
+                  <Button
+                    color="success"
+                    size="sm"
+                    onClick={() => updatePostCommentHandler(comment.id)}
+                    style={{ borderRadius: "6px" }}
+                  >
+                    Submit
+                  </Button>
+                </>
+                ) : (
+                <>
+                  <Button
+                    color="primary"
+                    size="sm"
+                    onClick={() => {
+                      setEditingPostCommentId(comment.id);
+                      setUpdateAPostComment(comment.name);
+                    }}
+                    style={{ borderRadius: "6px" }}
+                  >
+                    Update
+                  </Button>
+                  <Button
+                    color="danger"
+                    size="sm"
+                    onClick={() => deletePostComment(comment.id)}
+                    style={{ borderRadius: "6px" }}
+                  >
+                    Delete
+                  </Button>
+                </>
+              )}
+            </div>
         </div>
       ))}
     </Card>
