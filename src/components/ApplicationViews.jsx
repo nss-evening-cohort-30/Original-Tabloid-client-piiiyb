@@ -89,7 +89,7 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
           path="posts/:id"
           element={
             <AuthorizedRoute loggedInUser={loggedInUser}>
-              <PostDetails />
+              <PostDetails loggedInUser={loggedInUser} />
             </AuthorizedRoute>
           }
         />

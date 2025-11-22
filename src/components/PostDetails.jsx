@@ -18,21 +18,37 @@ import {
   Input,
   Alert,
 } from "reactstrap";
+import {
+  createPostComments,
+  deletePostComment,
+  getPostComments,
+  updatePostComment,
+} from "../managers/postCommentManger";
+import { getProfile } from "../managers/userProfileManager";
 
-export default function PostDetails() {
+export default function PostDetails({ loggedInUser }) {
   const { id } = useParams();
   const navigate = useNavigate();
   const [post, setPost] = useState(null);
+  const [postComments, setPostComments] = useState([]);
   const [allTags, setAllTags] = useState([]);
   const [selectedTagIds, setSelectedTagIds] = useState([]);
   const [isManageTagsModalOpen, setIsManageTagsModalOpen] = useState(false);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [newPostComment, setNewPostComment] = useState("");
+  const [updateAPostComment, setUpdateAPostComment] = useState("");
+  const [editingPostCommentId, setEditingPostCommentId] = useState(null);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     loadPost();
     loadAllTags();
-  }, [id]);
+
+    if (loggedInUser && loggedInUser.id) {
+      getProfile(loggedInUser.id).then(setUser);
+    }
+  }, [id, loggedInUser]);
 
   const loadPost = () => {
     setLoading(true);
@@ -46,6 +62,8 @@ export default function PostDetails() {
         setError(err.message);
         setLoading(false);
       });
+
+    getPostComments(id).then(setPostComments);
   };
 
   const loadAllTags = () => {
@@ -56,7 +74,6 @@ export default function PostDetails() {
 
   const toggleManageTagsModal = () => {
     if (!isManageTagsModalOpen) {
-      // Reset selected tags to current post tags when opening
       setSelectedTagIds(post?.tags?.map((t) => t.id) || []);
     }
     setIsManageTagsModalOpen(!isManageTagsModalOpen);
@@ -75,11 +92,10 @@ export default function PostDetails() {
 
   const handleSaveTags = () => {
     setError(null);
-
     updatePostTags(id, selectedTagIds)
       .then(() => {
         toggleManageTagsModal();
-        loadPost(); // Reload post to show updated tags
+        loadPost();
       })
       .catch((err) => setError(err.message));
   };
@@ -103,6 +119,36 @@ export default function PostDetails() {
     );
   }
 
+  const createPostCommentHandler = () => {
+    if (!newPostComment || !user) return;
+    createPostComments({
+      postId: id,
+      userId: user.id,
+      comment: newPostComment,
+      postedOne: new Date().toISOString(),
+    }).then(() => {
+      getPostComments(id).then(setPostComments);
+      setNewPostComment("");
+    });
+  };
+
+  const deletePostCommentHandler = (postCommentId) => {
+    deletePostComment(postCommentId).then(() => {
+      getPostComments(id).then(setPostComments);
+    });
+  };
+
+  const updatePostCommentHandler = (postCommentId) => {
+    if (!updateAPostComment) return;
+    updatePostComment(postCommentId, { comment: updateAPostComment }).then(
+      () => {
+        getPostComments(id).then(setPostComments);
+        setEditingPostCommentId(null);
+        setUpdateAPostComment("");
+      }
+    );
+  };
+
   return (
     <div className="container mt-5">
       <Card>
@@ -112,7 +158,10 @@ export default function PostDetails() {
             <strong>Subtitle:</strong> {post.subTitle}
           </CardText>
           <CardText>
-            <strong>Author:</strong> {post.user ? `${post.user.firstName} ${post.user.lastName}` : "Unknown"}
+            <strong>Author:</strong>{" "}
+            {post.user
+              ? `${post.user.firstName} ${post.user.lastName}`
+              : "Unknown"}
           </CardText>
           <CardText>
             <strong>Category:</strong> {post.category?.name || "Uncategorized"}
@@ -145,11 +194,7 @@ export default function PostDetails() {
             <Button color="primary" onClick={toggleManageTagsModal}>
               Manage Tags
             </Button>
-            <Button
-              color="secondary"
-              className="ms-2"
-              onClick={() => navigate("/")}
-            >
+            <Button color="secondary" className="ms-2" onClick={() => navigate("/")}>
               Back
             </Button>
           </div>
@@ -162,6 +207,7 @@ export default function PostDetails() {
         <ModalBody>
           {error && <Alert color="danger">{error}</Alert>}
           <p>Select tags to associate with this post:</p>
+
           {allTags.map((tag) => (
             <FormGroup check key={tag.id}>
               <Label check>
@@ -174,10 +220,12 @@ export default function PostDetails() {
               </Label>
             </FormGroup>
           ))}
+
           {allTags.length === 0 && (
             <p className="text-muted">No tags available.</p>
           )}
         </ModalBody>
+
         <ModalFooter>
           <Button color="secondary" onClick={toggleManageTagsModal}>
             Cancel
@@ -187,6 +235,89 @@ export default function PostDetails() {
           </Button>
         </ModalFooter>
       </Modal>
+
+      <div className="mt-4">
+        <h3 className="text-primary">Add a Comment</h3>
+        <input
+          type="text"
+          placeholder="write a comment..."
+          className="form-control"
+          value={newPostComment}
+          onChange={(e) => setNewPostComment(e.target.value)}
+        />
+        <Button
+          color="success"
+          onClick={createPostCommentHandler}
+          disabled={!newPostComment || !user}
+          className="mt-2"
+        >
+          Submit
+        </Button>
+      </div>
+
+      <Card className="mt-4">
+        <CardBody>
+          {postComments.map((comment) => (
+          <Card key={comment.id} className="mb-3">
+            <CardBody>
+              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px" }}>
+                <strong>{comment.user?.firstName}</strong>
+                <small>{new Date(comment.postedOne).toLocaleString()}</small>
+              </div>
+              <CardText>{comment.comment}</CardText>
+
+              {loggedInUser?.id === comment.userId && (
+                <div style={{ display: "flex", gap: "6px", marginTop: "8px" }}>
+                  <Button
+                    color="danger"
+                    size="sm"
+                    onClick={() => deletePostCommentHandler(comment.id)}
+                    style={{ borderRadius: "6px" }}
+                  >
+                    Delete
+                  </Button>
+
+                  {editingPostCommentId === comment.id ? (
+                    <>
+                      <input
+                        type="text"
+                        value={updateAPostComment}
+                        onChange={(e) => setUpdateAPostComment(e.target.value)}
+                        style={{
+                          height: "30px",
+                          borderRadius: "6px",
+                          padding: "2px 6px",
+                        }}
+                      />
+                      <Button
+                        color="success"
+                        size="sm"
+                        onClick={() => updatePostCommentHandler(comment.id)}
+                        style={{ borderRadius: "6px" }}
+                      >
+                        Submit
+                      </Button>
+                    </>
+                  ) : (
+                    <Button
+                      color="primary"
+                      size="sm"
+                      onClick={() => {
+                        setEditingPostCommentId(comment.id);
+                        setUpdateAPostComment(comment.comment);
+                      }}
+                      style={{ borderRadius: "6px" }}
+                    >
+                      Edit
+                    </Button>
+                  )}
+                </div>
+              )}
+            </CardBody>
+          </Card>
+        ))}
+        </CardBody>
+      </Card>
     </div>
   );
 }
