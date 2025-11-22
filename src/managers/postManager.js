@@ -64,4 +64,17 @@ export const updatePostTags = (postId, tagIds) => {
 
 export const getPostsByUser = (userId) => {
   return fetch(`${_apiUrl}/user/${userId}`).then((res) => res.json());
-}
+};
+
+export const getPostsByTag = (tagId) => {
+  return fetch(`${_apiUrl}/tag/${tagId}`, {
+    method: "GET",
+    credentials: "same-origin",
+  }).then((res) => {
+    if (res.ok) {
+      return res.json();
+    } else {
+      throw new Error("Failed to fetch posts by tag");
+    }
+  });
+};
