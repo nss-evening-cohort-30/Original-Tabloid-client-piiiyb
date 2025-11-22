@@ -95,4 +95,15 @@ export const deletePost = (id) => {
   });
 };
 
-
+export const getPostsByTag = (tagId) => {
+  return fetch(`${_apiUrl}/tag/${tagId}`, {
+    method: "GET",
+    credentials: "same-origin",
+  }).then((res) => {
+    if (res.ok) {
+      return res.json();
+    } else {
+      throw new Error("Failed to fetch posts by tag");
+    }
+  });
+};
