@@ -18,7 +18,7 @@ import {
   Input,
   Alert,
 } from "reactstrap";
-import { getPostComments } from "../managers/postCommentManger";
+import { deletePostComment, getPostComments } from "../managers/postCommentManger";
 
 export default function PostDetails() {
   const { id } = useParams();
@@ -109,11 +109,17 @@ export default function PostDetails() {
   }
 
   //start of comment handlers
-  const createPostHandler = () => {
+  const createPostCommentHandler = () => {
     if (!newPostComment) return;
     createCategory({ comment: newPostComment }).then(() => {
-      getAllCategories();
+      getPostComments(id).then(setPostComments);
       setNewPostComment("");
+    });
+  };
+
+    const deletePostCommentHandler = (categoryId) => {
+    deletePostComment(categoryId).then(() => {
+      getPostComments(id).then(setPostComments);
     });
   };
   //
@@ -211,7 +217,7 @@ export default function PostDetails() {
         value={newPostComment}
         onChange={(e) => setNewPostComment(e.target.value)}
       />
-      <Button color="success" onClick={createPostHandler} disabled={!newPostComment} >Submit</Button>
+      <Button color="success" onClick={createPostCommentHandler} disabled={!newPostComment} >Submit</Button>
     </div>
 //
     <Card>

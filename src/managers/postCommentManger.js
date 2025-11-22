@@ -13,3 +13,7 @@ export const CreatePostComments = (postComment) => {
     body: JSON.stringify(postComment),
   }).then((res) => res.json);
 };
+
+export const deletePostComment = (id) => {
+  return fetch(`${_apiUrl}/${id}`, {method: "DELETE"});
+};
