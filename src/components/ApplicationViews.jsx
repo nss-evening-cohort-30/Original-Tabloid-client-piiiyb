@@ -10,6 +10,8 @@ import SubscribedPosts from "./SubscribedPosts";
 import MyPosts from "./MyPosts";
 import Categories from "./Categories";
 import Tags from "./Tags";
+import PostsByTag from "./PostsByTag";
+import UserProfileEdit from "./userprofiles/UserProfileEdit";
 import PostDetails from "./PostDetails";
 import AuthorDetails from "./authors/AuthorDetails";
 import PostForm from "./PostForm";
@@ -67,6 +69,14 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
           }
         />
         <Route
+          path="posts-by-tag"
+          element={
+            <AuthorizedRoute loggedInUser={loggedInUser}>
+              <PostsByTag />
+            </AuthorizedRoute>
+          }
+        />
+        <Route
           path="posts/:id"
           element={
             <AuthorizedRoute loggedInUser={loggedInUser}>
@@ -115,6 +125,14 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
                 <UserProfileDetails />
               </AuthorizedRoute>
             }
+          />
+          <Route
+            path=":id/edit"
+            element={
+              <AuthorizedRoute loggedInUser={loggedInUser} roles={["Admin"]}>
+                <UserProfileEdit />
+              </AuthorizedRoute>
+            } 
           />
         </Route>
         <Route
