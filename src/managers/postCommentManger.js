@@ -1,10 +1,10 @@
-const _apiUrl = "/api/post";
+const _apiUrl = "/api/postComment";
 
 export const getPostComments = (postId) => {
   return fetch(`${_apiUrl}/${postId}`).then((res) => res.json());
 };
 
-export const CreatePostComments = (postComment) => {
+export const createPostComments = (postComment) => {
   return fetch(_apiUrl, {
     method: "POST",
     headers: {
