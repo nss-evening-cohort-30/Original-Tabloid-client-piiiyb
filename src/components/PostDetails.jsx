@@ -117,8 +117,8 @@ export default function PostDetails() {
     });
   };
 
-    const deletePostCommentHandler = (categoryId) => {
-    deletePostComment(categoryId).then(() => {
+    const deletePostCommentHandler = (postCommentId) => {
+    deletePostComment(postCommentId).then(() => {
       getPostComments(id).then(setPostComments);
     });
   };
@@ -207,7 +207,6 @@ export default function PostDetails() {
           </Button>
         </ModalFooter>
       </Modal>
-//
     <div>
       <h3 color="primary">Add a Category</h3>
       <input
@@ -219,13 +218,20 @@ export default function PostDetails() {
       />
       <Button color="success" onClick={createPostCommentHandler} disabled={!newPostComment} >Submit</Button>
     </div>
-//
     <Card>
       {postComments.map((comment) => (
         <div key={comment.id}>
           {comment.user}
           {comment.comment}
           {comment.postedOne}
+          <Button
+            color="danger"
+            size="sm"
+            onClick={() => deletePostComment(comment.id)}
+            style={{ borderRadius: "6px" }}
+          >
+            Delete
+          </Button>
         </div>
       ))}
     </Card>
