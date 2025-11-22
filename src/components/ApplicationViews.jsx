@@ -10,9 +10,12 @@ import SubscribedPosts from "./SubscribedPosts";
 import MyPosts from "./MyPosts";
 import Categories from "./Categories";
 import Tags from "./Tags";
+import UpdateForm from "./UpdateForm";
+import PostsByTag from "./PostsByTag";
 import UserProfileEdit from "./userprofiles/UserProfileEdit";
 import PostDetails from "./PostDetails";
 import AuthorDetails from "./authors/AuthorDetails";
+import PostForm from "./PostForm";
 
 export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
   return (
@@ -46,7 +49,7 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
           path="my-posts"
           element={
             <AuthorizedRoute loggedInUser={loggedInUser}>
-              <MyPosts />
+              <MyPosts loggedInUser={loggedInUser} />
             </AuthorizedRoute>
           }
         />
@@ -58,6 +61,14 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
             </AuthorizedRoute>
           }
         />
+          <Route 
+  path="update-form/:id" 
+  element={
+    <AuthorizedRoute loggedInUser={loggedInUser}>
+      <UpdateForm />
+    </AuthorizedRoute>
+  } 
+/>
         <Route
           path="tags"
           element={
@@ -67,10 +78,34 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
           }
         />
         <Route
+          path="posts-by-tag"
+          element={
+            <AuthorizedRoute loggedInUser={loggedInUser}>
+              <PostsByTag />
+            </AuthorizedRoute>
+          }
+        />
+        <Route
           path="posts/:id"
           element={
             <AuthorizedRoute loggedInUser={loggedInUser}>
               <PostDetails loggedInUser={loggedInUser} />
+            </AuthorizedRoute>
+          }
+        />
+        <Route
+          path="posts/new"
+          element={
+            <AuthorizedRoute loggedInUser={loggedInUser}>
+              <PostForm loggedInUser={loggedInUser} />
+            </AuthorizedRoute>
+          }
+        />
+        <Route
+          path="posts/:id/edit"
+          element={
+            <AuthorizedRoute loggedInUser={loggedInUser}>
+              <PostForm loggedInUser={loggedInUser} />
             </AuthorizedRoute>
           }
         />
@@ -117,7 +152,9 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
           path="register"
           element={<Register setLoggedInUser={setLoggedInUser} />}
         />
+        
       </Route>
+      
       <Route path="*" element={<p>Whoops, nothing here...</p>} />
     </Routes>
   );
