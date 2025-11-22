@@ -61,3 +61,7 @@ export const updatePostTags = (postId, tagIds) => {
     }
   });
 };
+
+export const getPostsByUser = (userId) => {
+  return fetch(`${_apiUrl}/user/${userId}`).then((res) => res.json());
+}
