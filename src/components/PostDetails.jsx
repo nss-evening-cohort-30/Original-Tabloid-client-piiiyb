@@ -30,6 +30,8 @@ export default function PostDetails() {
   const [isManageTagsModalOpen, setIsManageTagsModalOpen] = useState(false);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [newPostComment, setNewPostComment] = useState("");
+
 
   useEffect(() => {
     loadPost();
@@ -106,6 +108,16 @@ export default function PostDetails() {
     );
   }
 
+  //start of comment handlers
+  const createPostHandler = () => {
+    if (!newPostComment) return;
+    createCategory({ comment: newPostComment }).then(() => {
+      getAllCategories();
+      setNewPostComment("");
+    });
+  };
+  //
+
   return (
     <div className="container mt-5">
       <Card>
@@ -158,16 +170,6 @@ export default function PostDetails() {
           </div>
         </CardBody>
       </Card>
-              <Card>
-                {postComments.map((comment) => (
-                  <div key={comment.id}>
-                    {comment.id}
-                    {comment.user}
-                    {comment.comment}
-                    {comment.postedOne}
-                  </div>
-                ))}
-              </Card>
       {/* Manage Tags Modal */}
       <Modal isOpen={isManageTagsModalOpen} toggle={toggleManageTagsModal}>
         <ModalHeader toggle={toggleManageTagsModal}>Manage Tags</ModalHeader>
@@ -199,6 +201,28 @@ export default function PostDetails() {
           </Button>
         </ModalFooter>
       </Modal>
+//
+    <div>
+      <h3 color="primary">Add a Category</h3>
+      <input
+        type="text"
+        placeholder="Category name"
+        className="form-control"
+        value={newPostComment}
+        onChange={(e) => setNewPostComment(e.target.value)}
+      />
+      <Button color="success" onClick={createPostHandler} disabled={!newPostComment} >Submit</Button>
+    </div>
+//
+    <Card>
+      {postComments.map((comment) => (
+        <div key={comment.id}>
+          {comment.user}
+          {comment.comment}
+          {comment.postedOne}
+        </div>
+      ))}
+    </Card>
     </div>
   );
 }
