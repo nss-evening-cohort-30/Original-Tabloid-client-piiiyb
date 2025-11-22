@@ -10,6 +10,9 @@ import SubscribedPosts from "./SubscribedPosts";
 import MyPosts from "./MyPosts";
 import Categories from "./Categories";
 import Tags from "./Tags";
+import UserProfileEdit from "./userprofiles/UserProfileEdit";
+import PostDetails from "./PostDetails";
+import AuthorDetails from "./authors/AuthorDetails";
 
 export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
   return (
@@ -58,11 +61,28 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
         <Route
           path="tags"
           element={
-            <AuthorizedRoute loggedInUser={loggedInUser}>
+            <AuthorizedRoute loggedInUser={loggedInUser} roles={["Admin"]}>
               <Tags />
             </AuthorizedRoute>
           }
         />
+        <Route
+          path="posts/:id"
+          element={
+            <AuthorizedRoute loggedInUser={loggedInUser}>
+              <PostDetails />
+            </AuthorizedRoute>
+          }
+        />
+        <Route
+          path="authors/:id"
+          element={
+            <AuthorizedRoute loggedInUser={loggedInUser}>
+              <AuthorDetails />
+            </AuthorizedRoute>
+          }
+        />
+
         <Route path="/userprofiles">
           <Route
             index
@@ -79,6 +99,14 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
                 <UserProfileDetails />
               </AuthorizedRoute>
             }
+          />
+          <Route
+            path=":id/edit"
+            element={
+              <AuthorizedRoute loggedInUser={loggedInUser} roles={["Admin"]}>
+                <UserProfileEdit />
+              </AuthorizedRoute>
+            } 
           />
         </Route>
         <Route
