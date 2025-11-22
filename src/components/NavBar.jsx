@@ -48,21 +48,28 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
                     My Posts
                   </NavLink>
                 </NavItem>
+                <NavItem>
+                  <NavLink tag={RRNavLink} to="/posts-by-tag">
+                    Posts by Tag
+                  </NavLink>
+                </NavItem>
                 {loggedInUser.roles.includes("Admin") && (
-                  <NavItem>
-                    <NavLink tag={RRNavLink} to="/userprofiles">
-                      User Profiles
-                    </NavLink>
-                  </NavItem>
+                  <>
+                    <NavItem>
+                      <NavLink tag={RRNavLink} to="/userprofiles">
+                        User Profiles
+                      </NavLink>
+                    </NavItem>
+                    <NavItem>
+                      <NavLink tag={RRNavLink} to="/tags">
+                        Tag Management
+                      </NavLink>
+                    </NavItem>
+                  </>
                 )}
                 <NavItem>
                   <NavLink tag={RRNavLink} to="/categories">
                     Categories
-                  </NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink tag={RRNavLink} to="/tags">
-                    Tags
                   </NavLink>
                 </NavItem>
               </Nav>
@@ -90,6 +97,7 @@ export default function NavBar({ loggedInUser, setLoggedInUser }) {
             </NavItem>
           </Nav>
         )}
+
       </Navbar>
     </div>
   );
