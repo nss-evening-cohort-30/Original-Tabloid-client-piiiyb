@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { getAllPosts } from "../managers/postManager";
-import { getAllUserProfiles } from "../managers/userProfileManager";
+import { deletePost, getAllPosts } from "../managers/postManager";
 import {
   Container,
   Row,
@@ -14,11 +12,23 @@ import {
   Button,
 } from "reactstrap";
 import { tryGetLoggedInUser } from "../managers/authManager";
+import { Link } from "react-router-dom";
 
 export default function Home() {
   const [posts, setPosts] = useState([]);
   const [loggedInUser, setLoggedInUser] = useState(null);
   const [authors, setAuthors] = useState([]);
+
+  useEffect(() => {
+    tryGetLoggedInUser().then((user) => {
+      console.log("User object returned from API:", user);
+      if (user) {
+        console.log("User ID:", user.id);
+      }
+      setLoggedInUser(user);
+    });
+  }, []);
+
 
   useEffect(() => {
     tryGetLoggedInUser().then((user) => {
@@ -33,7 +43,6 @@ export default function Home() {
 
   useEffect(() => {
     getAllPosts().then(setPosts);
-    getAllUserProfiles().then(setAuthors);
   }, []);
 
 
@@ -57,7 +66,7 @@ export default function Home() {
     <Container className="mt-4">
       <h2 className="mb-4">Latest Posts</h2>
       <Row>
-        <Col md="8">
+        <Col md="6">
           <Card className="mb-4">
             <CardBody>
               <CardTitle tag="h3">{bigPost.title}</CardTitle>
@@ -72,9 +81,26 @@ export default function Home() {
                 <span>Read Time: {bigPost.realTime} min</span>
               </div>
               <div className="text-muted small mt-1">
-                By {bigPost.user?.firstName} {bigPost.user?.lastName} •{" "}
-                {bigPost.category?.name}
+                By {bigPost.author?.name} - {bigPost.category?.name}
               </div>
+              {loggedInUser.id == bigPost.userId && (
+                  <>
+                    <Link to={`/update-form/${post.id}`}>
+                      <Button>Edit</Button>
+                    </Link>
+                    <Button
+                      onClick={() => {
+                        deletePost(bigPost.id).then(() => {
+                          setPosts((prev) =>
+                            prev.filter((p) => p.id !== bigPost.id)
+                          );
+                        });
+                      }}
+                    >
+                      Delete
+                    </Button>
+                  </>
+                )}
             </CardBody>
           </Card>
           </Col>
@@ -107,7 +133,17 @@ export default function Home() {
                       <Link to={`/update-form/${post.id}`}>
                     <Button>Edit</Button>
                   </Link>
-                      <Button>Delete</Button>
+                      <Button
+                      onClick={() => {
+                        deletePost(post.id).then(() => {
+                          setPosts((prev) =>
+                            prev.filter((p) => p.id !== post.id)
+                          );
+                        });
+                      }}
+                    >
+                      Delete
+                    </Button>
                     </>
                   )}
                 </CardBody>
