@@ -12,6 +12,7 @@ import {
   Button,
 } from "reactstrap";
 import { tryGetLoggedInUser } from "../managers/authManager";
+import { Link } from "react-router-dom";
 
 export default function Home() {
   const [posts, setPosts] = useState([]);
@@ -99,7 +100,9 @@ export default function Home() {
                   </div>
                   {loggedInUser.id == post.userId && (
   <>
-    <Button>Edit</Button>
+    <Link to={`/update-form/${post.id}`}>
+  <Button>Edit</Button>
+</Link>
     <Button>Delete</Button>
   </>
 )}

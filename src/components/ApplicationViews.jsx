@@ -10,6 +10,7 @@ import SubscribedPosts from "./SubscribedPosts";
 import MyPosts from "./MyPosts";
 import Categories from "./Categories";
 import Tags from "./Tags";
+import UpdateForm from "./UpdateForm";
 
 export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
   return (
@@ -55,6 +56,14 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
             </AuthorizedRoute>
           }
         />
+          <Route 
+  path="update-form/:id" 
+  element={
+    <AuthorizedRoute loggedInUser={loggedInUser}>
+      <UpdateForm />
+    </AuthorizedRoute>
+  } 
+/>
         <Route
           path="tags"
           element={
@@ -89,7 +98,9 @@ export default function ApplicationViews({ loggedInUser, setLoggedInUser }) {
           path="register"
           element={<Register setLoggedInUser={setLoggedInUser} />}
         />
+        
       </Route>
+      
       <Route path="*" element={<p>Whoops, nothing here...</p>} />
     </Routes>
   );
